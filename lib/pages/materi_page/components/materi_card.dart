@@ -4,15 +4,26 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
+import 'package:mini_projeck/provider/provider.dart';
+import 'package:provider/provider.dart';
 
 class MateriCard extends StatelessWidget {
-  const MateriCard({super.key, required this.judulMateri, required this.url});
+  const MateriCard({
+    super.key,
+    required this.judulMateri,
+    required this.url,
+    required this.id,
+    required this.bab,
+  });
 
   final String judulMateri;
+  final String id;
   final String url;
+  final String bab;
 
   @override
   Widget build(BuildContext context) {
+    final _userProvider = Provider.of<UserProvider>(context);
     return Column(
       children: [
         Row(
@@ -32,7 +43,10 @@ class MateriCard extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                // print('$babs');
+                _userProvider.deleteMateri(id, bab);
+              },
               icon: Icon(Icons.delete),
             ),
             IconButton(

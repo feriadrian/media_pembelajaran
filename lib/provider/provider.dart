@@ -34,6 +34,7 @@ class UserProvider extends ChangeNotifier {
         throw (response.statusCode);
       } else {
         MateriModel data = MateriModel(
+          id: json.decode(response.body)['judul'].toString(),
           judul: judul,
           url: urlMateri,
         );
@@ -44,6 +45,16 @@ class UserProvider extends ChangeNotifier {
     } catch (err) {
       throw (err);
     }
+  }
+
+  Future<void> deleteMateri(String id, String bab) {
+    Uri url = Uri.parse('$urlMaster/materi/$bab/$id.json');
+    return http.delete(url).then(
+      (response) {
+        _allMateri.removeWhere((element) => element.id == id);
+        notifyListeners();
+      },
+    );
   }
 
   Future<void> addUsers(
@@ -85,7 +96,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<MateriModel>> inisialData(String kategory) async {
+  Stream<List<MateriModel>> inisialData(String kategory) async* {
     _allMateri = [];
     Uri url = Uri.parse('$urlMaster/materi/$kategory.json');
 
@@ -101,13 +112,13 @@ class UserProvider extends ChangeNotifier {
         if (data != null) {
           data.forEach(
             (key, value) {
-              _allMateri
-                  .add(MateriModel(judul: value['judul'], url: value['url']));
+              _allMateri.add(MateriModel(
+                  id: key, judul: value['judul'], url: value['url']));
             },
           );
         }
       }
-      return _allMateri;
+      yield _allMateri;
     } catch (err) {
       throw (err);
     }

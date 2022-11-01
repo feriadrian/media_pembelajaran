@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:mini_projeck/models/materi_model.dart';
 import 'package:mini_projeck/pages/materi_page/components/list_materi.dart';
 import 'package:mini_projeck/pages/materi_page/components/materi_card.dart';
 import 'package:mini_projeck/pages/video_page/video_page.dart';
@@ -18,13 +19,13 @@ class MateriPage extends StatelessWidget {
     final _userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       body: SafeArea(
-        child: FutureBuilder(
-          future: _userProvider.inisialData(kategori),
+        child: StreamBuilder<List<MateriModel>>(
+          stream: _userProvider.inisialData(kategori),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
                 child: Column(
-                  children: _userProvider.allMateri
+                  children: snapshot.data!
                       .map((e) => GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(
@@ -34,8 +35,10 @@ class MateriPage extends StatelessWidget {
                               );
                             },
                             child: MateriCard(
+                              id: e.id,
                               judulMateri: e.judul,
                               url: e.url,
+                              bab: kategori,
                             ),
                           ))
                       .toList(),
