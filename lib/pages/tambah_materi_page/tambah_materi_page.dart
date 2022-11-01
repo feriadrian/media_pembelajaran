@@ -31,7 +31,7 @@ class _TambahMateriPageState extends State<TambahMateriPage> {
     super.dispose();
   }
 
-  String _value = 'data Kosong';
+  String _value = 'Bilangan Bulat';
   @override
   Widget build(BuildContext context) {
     final _userProvider = Provider.of<UserProvider>(context);

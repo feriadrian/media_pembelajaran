@@ -15,11 +15,18 @@ class DataDiri extends StatefulWidget {
   State<DataDiri> createState() => _DataDiriState();
 }
 
-final _formkey = GlobalKey<FormState>();
-final _namaC = TextEditingController();
-final _nisnC = TextEditingController();
-
 class _DataDiriState extends State<DataDiri> {
+  final _formkey = GlobalKey<FormState>();
+  final _namaC = TextEditingController();
+  final _nisnC = TextEditingController();
+
+  @override
+  void dispose() {
+    _namaC.dispose();
+    _nisnC.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

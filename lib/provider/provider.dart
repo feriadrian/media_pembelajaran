@@ -85,7 +85,7 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> inisialData(String kategory) async {
+  Future<List<MateriModel>> inisialData(String kategory) async {
     _allMateri = [];
     Uri url = Uri.parse('$urlMaster/materi/$kategory.json');
 
@@ -107,7 +107,7 @@ class UserProvider extends ChangeNotifier {
           );
         }
       }
-      notifyListeners();
+      return _allMateri;
     } catch (err) {
       throw (err);
     }

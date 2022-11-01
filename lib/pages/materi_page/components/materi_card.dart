@@ -15,17 +15,31 @@ class MateriCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.all(
-            getPropertionateScreenWidht(10),
-          ),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              judulMateri,
-              style: primaryTextStyle.copyWith(fontSize: 20, fontWeight: bold),
+        Row(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 7 / 10,
+              padding: EdgeInsets.all(
+                getPropertionateScreenWidht(10),
+              ),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  judulMateri,
+                  style:
+                      primaryTextStyle.copyWith(fontSize: 20, fontWeight: bold),
+                ),
+              ),
             ),
-          ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.delete),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.edit),
+            ),
+          ],
         ),
         Divider(
           color: Colors.black,
