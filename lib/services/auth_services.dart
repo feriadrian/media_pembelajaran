@@ -27,8 +27,8 @@ class AuthSerices extends ChangeNotifier {
       final String role = 'siswa';
       await UserProvider().singUp(email, password);
       _error = '';
-      final String nama = '-';
-      final String nisn = '-';
+      final String nama = 'Abdul Basir';
+      final String nisn = '199099';
 
       await UserProvider().addUsers(localId, email, nama, nisn, role);
       notifyListeners();

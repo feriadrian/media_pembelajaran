@@ -13,7 +13,7 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
+    final _userProvider = Provider.of<AuthSerices>(context);
     return Drawer(
       child: Container(
         child: Column(
@@ -89,8 +89,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        Provider.of<AuthSerices>(context, listen: false)
-                            .logout();
+                        _userProvider.logout();
                       },
                       child: Container(
                         height: getPropertionateScreenHeight(58),

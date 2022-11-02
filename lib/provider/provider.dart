@@ -124,6 +124,33 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
+  MateriModel selectById(String id) =>
+      _allMateri.firstWhere((element) => element.id == id);
+
+  Future<void> editmateri(String id, String judul, String urlEdit, String bab) {
+    Uri url = Uri.parse('$urlMaster/materi/$bab/$id.json');
+
+    return http
+        .put(
+      url,
+      body: json.encode(
+        {
+          'judul': judul,
+          'url': urlEdit,
+        },
+      ),
+    )
+        .then(
+      (response) {
+        MateriModel selecteMateri =
+            _allMateri.firstWhere((element) => element.id == id);
+        selecteMateri.judul = judul;
+        selecteMateri.url = url.toString();
+        notifyListeners();
+      },
+    );
+  }
+
   // Future<void> fetchUserById() async {
   //   _allUsers = [];
   //   FirebaseAuth _auth = FirebaseAuth.instance;

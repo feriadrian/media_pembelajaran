@@ -39,58 +39,71 @@ class _TambahMateriPageState extends State<TambahMateriPage> {
       body: Padding(
         padding: EdgeInsets.all(defaultPadding),
         child: SafeArea(
-          child: Column(
-            children: [
-              InputField(
-                hintText: 'Judul Materi',
-                keyboardType: TextInputType.text,
-                controller: _judulC,
-                validator: () {
-                  if (_judulC.text == null || _judulC.text.isEmpty) {
-                    return 'Please Enter Your Email.';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              SizedBox(
-                height: getPropertionateScreenHeight(24),
-              ),
-              InputField(
-                hintText: 'Link Video',
-                keyboardType: TextInputType.text,
-                controller: _urlC,
-                validator: () {
-                  if (_urlC.text == null || _urlC.text.isEmpty) {
-                    return 'Please Enter Your Email.';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              SizedBox(
-                height: getPropertionateScreenHeight(24),
-              ),
-              buildKelas(
-                press: (value) {
-                  setState(() {
-                    print("data: " + value);
-                    _value = value;
-                  });
-                },
-                hintText: 'Pilih BAB',
-              ),
-              SizedBox(
-                height: getPropertionateScreenHeight(24),
-              ),
-              LoginButton(
-                text: 'Tambah',
-                press: () async {
-                  await _userProvider.addMateri(
-                      _value, _judulC.text, _urlC.text);
-                },
-              ),
-            ],
+          child: Form(
+            key: _formkey,
+            child: Column(
+              children: [
+                InputField(
+                  hintText: 'Judul Materi',
+                  keyboardType: TextInputType.text,
+                  controller: _judulC,
+                  validator: () {
+                    if (_judulC.text == null || _judulC.text.isEmpty) {
+                      return 'Please Enter Your Email.';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: getPropertionateScreenHeight(24),
+                ),
+                InputField(
+                  hintText: 'Link Video',
+                  keyboardType: TextInputType.text,
+                  controller: _urlC,
+                  validator: () {
+                    if (_urlC.text == null || _urlC.text.isEmpty) {
+                      return 'Please Enter Your Email.';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: getPropertionateScreenHeight(24),
+                ),
+                buildKelas(
+                  press: (value) {
+                    setState(() {
+                      print("data: " + value);
+                      _value = value;
+                    });
+                  },
+                  hintText: 'Pilih BAB',
+                ),
+                SizedBox(
+                  height: getPropertionateScreenHeight(24),
+                ),
+                LoginButton(
+                  text: 'Tambah',
+                  press: () async {
+                    if (_formkey.currentState!.validate()) {
+                      await _userProvider
+                          .addMateri(_value, _judulC.text, _urlC.text)
+                          .then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Berhasil Ditambahkan'),
+                            duration: Duration(milliseconds: 1500),
+                          ),
+                        );
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

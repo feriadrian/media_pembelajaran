@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
+import 'package:mini_projeck/pages/edit_materi/edit_materi.dart';
 import 'package:mini_projeck/provider/provider.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +51,18 @@ class MateriCard extends StatelessWidget {
               icon: Icon(Icons.delete),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditMateri(
+                      judul: judulMateri,
+                      url: url,
+                      bab: bab,
+                      id: id,
+                    ),
+                  ),
+                );
+              },
               icon: Icon(Icons.edit),
             ),
           ],
