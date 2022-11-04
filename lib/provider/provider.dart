@@ -10,13 +10,59 @@ import 'package:mini_projeck/models/users_models.dart';
 import 'package:mini_projeck/services/services.dart';
 
 class UserProvider extends ChangeNotifier {
-  List<UserModels> _allUsers = [];
+  static FirebaseAuth _auth = FirebaseAuth.instance;
+
+  UserModels? _allUsers;
   List<MateriModel> _allMateri = [];
   List<MateriModel> get allMateri => _allMateri;
 
-  List<UserModels> get allUsers => _allUsers;
+  UserModels get allUsers => _allUsers!;
 
   String urlMaster = 'https://mini-project-26683-default-rtdb.firebaseio.com/';
+
+  Future<UserModels> fetchDataUser(
+    String id,
+  ) async {
+    Uri uri = Uri.parse('$urlMaster/users.json');
+    // final User user = _auth.currentUser!;
+    // final uid = user.uid;
+    try {
+      var response = await http.get(uri);
+
+      print(response.statusCode);
+
+      if (response.statusCode >= 300 && response.statusCode < 200) {
+        throw (response.statusCode);
+      } else {
+        var data = json.decode(response.body) as Map<String, dynamic>;
+        UserModels? userModels;
+        if (data != null) {
+          data.forEach(
+            (key, value) {
+              if (value['id'] == id) {
+                userModels = UserModels(
+                  id: key,
+                  email: value['email'],
+                  nama: value['nama'],
+                  nins: value['nisn'],
+                  role: value['role'],
+                  createAt: DateTime.now(),
+                );
+                _allUsers = userModels;
+                print(_allUsers!.nama.toString());
+              }
+            },
+          );
+        } else {
+          print('daa null');
+        }
+      }
+      notifyListeners();
+      return _allUsers!;
+    } catch (err) {
+      throw (err);
+    }
+  }
 
   Future<void> addMateri(String bab, String judul, String urlMateri) async {
     print(bab);
@@ -88,7 +134,7 @@ class UserProvider extends ChangeNotifier {
           createAt: dateNow,
         );
 
-        _allUsers.add(data);
+        _allUsers = data;
         notifyListeners();
       }
     } catch (err) {

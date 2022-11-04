@@ -56,7 +56,7 @@ class _RegisPageState extends State<RegisPage> {
                             }
                           },
                           hintText: 'Email',
-                          keyboardType: TextInputType.name,
+                          keyboardType: TextInputType.emailAddress,
                           controller: _emailC),
                       SizedBox(
                         height: getPropertionateScreenHeight(24),
@@ -70,7 +70,7 @@ class _RegisPageState extends State<RegisPage> {
                             }
                           },
                           hintText: 'Password',
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           controller: _passC),
                       SizedBox(
                         height: getPropertionateScreenHeight(24),
@@ -81,11 +81,11 @@ class _RegisPageState extends State<RegisPage> {
                         press: () async {
                           if (await authServices.regis(
                               email: _emailC.text, password: _passC.text)) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                                (route) => false);
+                            // Navigator.of(context).pushAndRemoveUntil(
+                            //     MaterialPageRoute(
+                            //       builder: (context) => HomePage(),
+                            //     ),
+                            //     (route) => false);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

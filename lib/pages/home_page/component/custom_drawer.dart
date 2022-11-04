@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
+import 'package:mini_projeck/pages/login_page/login_page.dart';
 import 'package:mini_projeck/provider/provider.dart';
 import 'package:mini_projeck/services/auth_services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -13,7 +15,9 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _userProvider = Provider.of<AuthSerices>(context);
+    final _userProvider = Provider.of<UserProvider>(context);
+    final _authProvider = Provider.of<AuthSerices>(context);
+
     return Drawer(
       child: Container(
         child: Column(
@@ -62,7 +66,7 @@ class CustomDrawer extends StatelessWidget {
                           width: getPropertionateScreenWidht(40),
                         ),
                         Text(
-                          'Feri Adrian',
+                          _userProvider.allUsers.nama,
                           style: primaryTextStyle.copyWith(
                               fontSize: 16, fontWeight: medium),
                         ),
@@ -78,7 +82,7 @@ class CustomDrawer extends StatelessWidget {
                           width: getPropertionateScreenWidht(40),
                         ),
                         Text(
-                          '1924038',
+                          _userProvider.allUsers.nins,
                           style: primaryTextStyle.copyWith(
                               fontSize: 16, fontWeight: medium),
                         ),
@@ -88,8 +92,15 @@ class CustomDrawer extends StatelessWidget {
                       height: getPropertionateScreenHeight(10),
                     ),
                     InkWell(
-                      onTap: () {
-                        _userProvider.logout();
+                      onTap: () async {
+                        final pref = await SharedPreferences.getInstance();
+                        pref.remove('token');
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                            (route) => false);
                       },
                       child: Container(
                         height: getPropertionateScreenHeight(58),

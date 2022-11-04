@@ -110,11 +110,11 @@ class _LoginPageState extends State<LoginPage> {
                         press: () async {
                           if (await authServices.login(
                               email: _emailC.text, password: _passC.text)) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

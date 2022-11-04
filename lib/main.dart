@@ -38,17 +38,8 @@ class MyApp extends StatelessWidget {
           create: (context) => UserProvider(),
         ),
       ],
-      builder: (context, child) => StreamBuilder<User?>(
-        stream: AuthSerices().streamAuthStatus,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            print(snapshot.data);
-            return MaterialApp(
-              home: snapshot.data != null ? HomePage() : LoginPage(),
-            );
-          }
-          return Loadingview();
-        },
+      builder: (context, child) => MaterialApp(
+        home: SplashPage(),
       ),
     );
   }
