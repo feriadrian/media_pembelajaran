@@ -30,7 +30,7 @@ class _SplashPageState extends State<SplashPage> {
     final String token = loginData.getString('token') ?? '';
     if (token != '') {
       print(token);
-      await Provider.of<UserProvider>(context, listen: false)
+      await Provider.of<AuthSerices>(context, listen: false)
           .fetchDataUser(token);
       Navigator.pushReplacement(
         context,

@@ -17,49 +17,6 @@ class UserProvider extends ChangeNotifier {
 
   String urlMaster = 'https://mini-project-26683-default-rtdb.firebaseio.com/';
 
-  Future<UserModels> fetchDataUser(
-    String id,
-  ) async {
-    Uri uri = Uri.parse('$urlMaster/users.json');
-    // final User user = _auth.currentUser!;
-    // final uid = user.uid;
-    try {
-      var response = await http.get(uri);
-
-      print(response.statusCode);
-
-      UserModels? userModels;
-      if (response.statusCode >= 300 && response.statusCode < 200) {
-        throw (response.statusCode);
-      } else {
-        var data = json.decode(response.body) as Map<String, dynamic>;
-        if (data != null) {
-          data.forEach(
-            (key, value) {
-              if (value['id'] == id) {
-                userModels = UserModels(
-                  id: key,
-                  email: value['email'],
-                  nama: value['nama'],
-                  nins: value['nisn'],
-                  role: value['role'],
-                  createAt: DateTime.now(),
-                );
-                print(userModels!.nama.toString());
-              }
-            },
-          );
-        } else {
-          print('daa null');
-        }
-      }
-      notifyListeners();
-      return userModels!;
-    } catch (err) {
-      throw (err);
-    }
-  }
-
   Future<void> addMateri(String bab, String judul, String urlMateri) async {
     print(bab);
     Uri url = Uri.parse('$urlMaster/materi/$bab.json');

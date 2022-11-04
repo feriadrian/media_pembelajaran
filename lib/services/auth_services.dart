@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthSerices extends ChangeNotifier {
+  String urlMaster = 'https://mini-project-26683-default-rtdb.firebaseio.com/';
+
   UserModels? _allUsers;
 
   UserModels get allUsers => _allUsers!;
@@ -27,33 +29,6 @@ class AuthSerices extends ChangeNotifier {
 
   Stream<User?> get streamAuthStatus => _auth.authStateChanges();
 
-  Future<bool> regis({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      // UserCredential userCredential =
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      final User user = _auth.currentUser!;
-      final localId = user.uid;
-
-      final String role = 'siswa';
-      await UserProvider().singUp(email, password);
-      _error = '';
-      final String nama = 'Siti Hawa';
-      final String nisn = '10118021';
-
-      await UserProvider().addUsers(localId, email, nama, nisn, role);
-      notifyListeners();
-      return true;
-    } on FirebaseAuthException catch (e) {
-      _error = e.message.toString();
-      notifyListeners();
-      return false;
-    }
-  }
-
   Future<bool> login({required String email, required String password}) async {
     try {
       // UserCredential userCredential =
@@ -70,10 +45,35 @@ class AuthSerices extends ChangeNotifier {
       await UserProvider().singIn(email, password);
 
       _error = '';
-      await UserProvider().fetchDataUser(
-        localId,
-      );
-      _allUsers = await UserProvider().fetchDataUser(localId);
+
+      _allUsers = await fetchDataUser(localId);
+      notifyListeners();
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _error = e.message.toString();
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> regis({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      // UserCredential userCredential =
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      final User user = _auth.currentUser!;
+      final localId = user.uid;
+
+      final String role = 'siswa';
+      await UserProvider().singUp(email, password);
+      _error = '';
+      final String nama = '-';
+      final String nisn = '-';
+
+      await UserProvider().addUsers(localId, email, nama, nisn, role);
       notifyListeners();
       return true;
     } on FirebaseAuthException catch (e) {
@@ -86,5 +86,49 @@ class AuthSerices extends ChangeNotifier {
   void logout() async {
     await FirebaseAuth.instance.signOut();
     notifyListeners();
+  }
+
+  Future<UserModels> fetchDataUser(
+    String id,
+  ) async {
+    Uri uri = Uri.parse('$urlMaster/users.json');
+    // final User user = _auth.currentUser!;
+    // final uid = user.uid;
+    try {
+      var response = await http.get(uri);
+
+      print(response.statusCode);
+
+      UserModels? userModels;
+      if (response.statusCode >= 300 && response.statusCode < 200) {
+        throw (response.statusCode);
+      } else {
+        var data = json.decode(response.body) as Map<String, dynamic>;
+        if (data != null) {
+          data.forEach(
+            (key, value) {
+              if (value['id'] == id) {
+                userModels = UserModels(
+                  id: key,
+                  email: value['email'],
+                  nama: value['nama'],
+                  nins: value['nisn'],
+                  role: value['role'],
+                  createAt: DateTime.now(),
+                );
+                print(userModels!.nama.toString());
+              }
+            },
+          );
+        } else {
+          print('daa null');
+        }
+      }
+      _allUsers = userModels;
+      notifyListeners();
+      return userModels!;
+    } catch (err) {
+      throw (err);
+    }
   }
 }
