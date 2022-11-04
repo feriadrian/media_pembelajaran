@@ -43,28 +43,34 @@ class MateriCard extends StatelessWidget {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: () {
-                // print('$babs');
-                _userProvider.deleteMateri(id, bab);
-              },
-              icon: Icon(Icons.delete),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => EditMateri(
-                      judul: judulMateri,
-                      url: url,
-                      bab: bab,
-                      id: id,
-                    ),
-                  ),
-                );
-              },
-              icon: Icon(Icons.edit),
-            ),
+            _userProvider.allUsers.role == 'admin'
+                ? Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          // print('$babs');
+                          _userProvider.deleteMateri(id, bab);
+                        },
+                        icon: Icon(Icons.delete),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => EditMateri(
+                                judul: judulMateri,
+                                url: url,
+                                bab: bab,
+                                id: id,
+                              ),
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.edit),
+                      ),
+                    ],
+                  )
+                : SizedBox()
           ],
         ),
         Divider(
