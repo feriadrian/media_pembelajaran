@@ -12,11 +12,8 @@ import 'package:mini_projeck/services/services.dart';
 class UserProvider extends ChangeNotifier {
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
-  UserModels? _allUsers;
   List<MateriModel> _allMateri = [];
   List<MateriModel> get allMateri => _allMateri;
-
-  UserModels get allUsers => _allUsers!;
 
   String urlMaster = 'https://mini-project-26683-default-rtdb.firebaseio.com/';
 
@@ -31,11 +28,11 @@ class UserProvider extends ChangeNotifier {
 
       print(response.statusCode);
 
+      UserModels? userModels;
       if (response.statusCode >= 300 && response.statusCode < 200) {
         throw (response.statusCode);
       } else {
         var data = json.decode(response.body) as Map<String, dynamic>;
-        UserModels? userModels;
         if (data != null) {
           data.forEach(
             (key, value) {
@@ -48,8 +45,7 @@ class UserProvider extends ChangeNotifier {
                   role: value['role'],
                   createAt: DateTime.now(),
                 );
-                _allUsers = userModels;
-                print(_allUsers!.nama.toString());
+                print(userModels!.nama.toString());
               }
             },
           );
@@ -58,7 +54,7 @@ class UserProvider extends ChangeNotifier {
         }
       }
       notifyListeners();
-      return _allUsers!;
+      return userModels!;
     } catch (err) {
       throw (err);
     }
@@ -134,7 +130,6 @@ class UserProvider extends ChangeNotifier {
           createAt: dateNow,
         );
 
-        _allUsers = data;
         notifyListeners();
       }
     } catch (err) {

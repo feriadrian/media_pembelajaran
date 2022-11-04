@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
+import 'package:mini_projeck/models/users_models.dart';
 import 'package:mini_projeck/pages/login_page/login_page.dart';
 import 'package:mini_projeck/provider/provider.dart';
 import 'package:mini_projeck/services/auth_services.dart';
@@ -15,8 +17,10 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _userProvider = Provider.of<UserProvider>(context);
     final _authProvider = Provider.of<AuthSerices>(context);
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    final User _user = _auth.currentUser!;
+    final localId = _user.uid;
 
     return Drawer(
       child: Container(
@@ -66,7 +70,7 @@ class CustomDrawer extends StatelessWidget {
                           width: getPropertionateScreenWidht(40),
                         ),
                         Text(
-                          _userProvider.allUsers.nama,
+                          _authProvider.allUsers.nama,
                           style: primaryTextStyle.copyWith(
                               fontSize: 16, fontWeight: medium),
                         ),
@@ -82,7 +86,7 @@ class CustomDrawer extends StatelessWidget {
                           width: getPropertionateScreenWidht(40),
                         ),
                         Text(
-                          _userProvider.allUsers.nins,
+                          _authProvider.allUsers.nins,
                           style: primaryTextStyle.copyWith(
                               fontSize: 16, fontWeight: medium),
                         ),
@@ -94,6 +98,7 @@ class CustomDrawer extends StatelessWidget {
                     InkWell(
                       onTap: () async {
                         final pref = await SharedPreferences.getInstance();
+
                         pref.remove('token');
                         Navigator.pushAndRemoveUntil(
                             context,

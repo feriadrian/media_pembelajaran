@@ -11,6 +11,7 @@ import 'package:mini_projeck/pages/home_page/component/list_cover_gridview.dart'
 import 'package:mini_projeck/pages/home_page/component/qoute_card.dart';
 import 'package:mini_projeck/pages/tambah_materi_page/tambah_materi_page.dart';
 import 'package:mini_projeck/provider/provider.dart';
+import 'package:mini_projeck/services/auth_services.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _userProvider = Provider.of<UserProvider>(context);
+    final _userProvider = Provider.of<AuthSerices>(context);
     return Scaffold(
       floatingActionButton: _userProvider.allUsers.role == 'admin'
           ? FloatingActionButton(

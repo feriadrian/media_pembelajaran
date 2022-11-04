@@ -6,6 +6,7 @@ import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
 import 'package:mini_projeck/pages/edit_materi/edit_materi.dart';
 import 'package:mini_projeck/provider/provider.dart';
+import 'package:mini_projeck/services/auth_services.dart';
 import 'package:provider/provider.dart';
 
 class MateriCard extends StatelessWidget {
@@ -24,6 +25,7 @@ class MateriCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _authProvider = Provider.of<AuthSerices>(context);
     final _userProvider = Provider.of<UserProvider>(context);
     return Column(
       children: [
@@ -43,7 +45,7 @@ class MateriCard extends StatelessWidget {
                 ),
               ),
             ),
-            _userProvider.allUsers.role == 'admin'
+            _authProvider.allUsers.role == 'admin'
                 ? Row(
                     children: [
                       IconButton(

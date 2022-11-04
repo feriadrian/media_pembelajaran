@@ -4,11 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:mini_projeck/models/users_models.dart';
 import 'package:mini_projeck/provider/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthSerices extends ChangeNotifier {
+  UserModels? _allUsers;
+
+  UserModels get allUsers => _allUsers!;
+
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future setToken(String token) async {
@@ -68,6 +73,7 @@ class AuthSerices extends ChangeNotifier {
       await UserProvider().fetchDataUser(
         localId,
       );
+      _allUsers = await UserProvider().fetchDataUser(localId);
       notifyListeners();
       return true;
     } on FirebaseAuthException catch (e) {
