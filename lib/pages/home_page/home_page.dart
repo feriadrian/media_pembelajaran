@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   // void didChangeDependencies() {
   //   if (isInit) {
   //     isLoading = true;
-  //     Provider.of<UserProvider>(context, listen: false)
+  //     Provider.of<MateriProvider>(context, listen: false)
   //         .fetchUserById()
   //         .then((value) {
   //       setState(() {
@@ -70,9 +70,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _userProvider = Provider.of<AuthSerices>(context);
+    final _MateriProvider = Provider.of<AuthSerices>(context);
     return Scaffold(
-      floatingActionButton: _userProvider.allUsers.role == 'admin'
+      floatingActionButton: _MateriProvider.allUsers.role == 'admin'
           ? FloatingActionButton(
               onPressed: () {
                 Navigator.of(context).push(

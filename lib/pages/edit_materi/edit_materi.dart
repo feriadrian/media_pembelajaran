@@ -25,7 +25,7 @@ class EditMateri extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _userProvider = Provider.of<UserProvider>(context);
+    final _MateriProvider = Provider.of<MateriProvider>(context);
     _judulC.text = judul;
     _urlC.text = url;
     return Scaffold(
@@ -74,7 +74,7 @@ class EditMateri extends StatelessWidget {
                   press: () async {
                     print(_judulC.text);
                     if (_formkey.currentState!.validate()) {
-                      await _userProvider.editmateri(
+                      await _MateriProvider.editmateri(
                           id, _judulC.text, _urlC.text, bab);
                     }
                   },

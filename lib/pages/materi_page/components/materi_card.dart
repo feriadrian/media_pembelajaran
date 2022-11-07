@@ -26,7 +26,7 @@ class MateriCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthSerices>(context);
-    final _userProvider = Provider.of<UserProvider>(context);
+    final _MateriProvider = Provider.of<MateriProvider>(context);
     return Column(
       children: [
         Row(
@@ -51,7 +51,7 @@ class MateriCard extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           // print('$babs');
-                          _userProvider.deleteMateri(id, bab);
+                          _MateriProvider.deleteMateri(id, bab);
                         },
                         icon: Icon(Icons.delete),
                       ),

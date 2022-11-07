@@ -42,7 +42,7 @@ class AuthSerices extends ChangeNotifier {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      await UserProvider().singIn(email, password);
+      await MateriProvider().singIn(email, password);
 
       _error = '';
 
@@ -68,12 +68,12 @@ class AuthSerices extends ChangeNotifier {
       final localId = user.uid;
 
       final String role = 'siswa';
-      await UserProvider().singUp(email, password);
+      await MateriProvider().singUp(email, password);
       _error = '';
       final String nama = '-';
       final String nisn = '-';
 
-      await UserProvider().addUsers(localId, email, nama, nisn, role);
+      await MateriProvider().addUsers(localId, email, nama, nisn, role);
       notifyListeners();
       return true;
     } on FirebaseAuthException catch (e) {

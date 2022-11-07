@@ -34,7 +34,7 @@ class _TambahMateriPageState extends State<TambahMateriPage> {
   String _value = 'Bilangan Bulat';
   @override
   Widget build(BuildContext context) {
-    final _userProvider = Provider.of<UserProvider>(context);
+    final _MateriProvider = Provider.of<MateriProvider>(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(defaultPadding),
@@ -89,8 +89,8 @@ class _TambahMateriPageState extends State<TambahMateriPage> {
                   text: 'Tambah',
                   press: () async {
                     if (_formkey.currentState!.validate()) {
-                      await _userProvider
-                          .addMateri(_value, _judulC.text, _urlC.text)
+                      await _MateriProvider.addMateri(
+                              _value, _judulC.text, _urlC.text)
                           .then((value) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

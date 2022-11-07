@@ -16,11 +16,11 @@ class MateriPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _userProvider = Provider.of<UserProvider>(context);
+    final _MateriProvider = Provider.of<MateriProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder<List<MateriModel>>(
-          stream: _userProvider.inisialData(kategori),
+          stream: _MateriProvider.inisialData(kategori),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(
