@@ -42,7 +42,7 @@ class AuthSerices extends ChangeNotifier {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      await MateriProvider().singIn(email, password);
+      await singIn(email, password);
 
       _error = '';
 
@@ -68,7 +68,7 @@ class AuthSerices extends ChangeNotifier {
       final localId = user.uid;
 
       final String role = 'siswa';
-      await MateriProvider().singUp(email, password);
+      singUp(email, password);
       _error = '';
       final String nama = '-';
       final String nisn = '-';
@@ -130,5 +130,29 @@ class AuthSerices extends ChangeNotifier {
     } catch (err) {
       throw (err);
     }
+  }
+
+  Future<void> singUp(String email, String password) async {
+    Uri url = Uri.parse(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBLoyyGLhfyw2K-kNdIcVluwjDy5mXvIVE');
+    var response = await http.post(url,
+        body: json.encode({
+          'email': email,
+          'password': password,
+          'returnSecureToken': true,
+        }));
+    print(json.decode(response.body));
+  }
+
+  Future<void> singIn(String email, String password) async {
+    Uri url = Uri.parse(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBLoyyGLhfyw2K-kNdIcVluwjDy5mXvIVE');
+    var response = await http.post(url,
+        body: json.encode({
+          'email': email,
+          'password': password,
+          'returnSecureToken': true,
+        }));
+    print(json.decode(response.body));
   }
 }
