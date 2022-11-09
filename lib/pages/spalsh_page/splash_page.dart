@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/pages/home_page/home_page.dart';
 import 'package:mini_projeck/pages/login_page/login_page.dart';
-import 'package:mini_projeck/provider/provider.dart';
+import 'package:mini_projeck/provider/materi_provider.dart';
+import 'package:mini_projeck/provider/user_provider.dart';
 import 'package:mini_projeck/services/auth_services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,8 +31,9 @@ class _SplashPageState extends State<SplashPage> {
     final String token = loginData.getString('token') ?? '';
     if (token != '') {
       print(token);
-      await Provider.of<AuthSerices>(context, listen: false)
-          .fetchDataUser(token);
+      var data = await Provider.of<UserProvider>(context, listen: false)
+          .fetchDataUser();
+      print('complete: ' + data.role.toString());
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -46,13 +48,11 @@ class _SplashPageState extends State<SplashPage> {
         ),
       );
     }
-    print(token);
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _auth = Provider.of<AuthSerices>(context);
     return Scaffold(
       body: Center(
         child: Image.asset(

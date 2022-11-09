@@ -5,7 +5,8 @@ import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
 import 'package:mini_projeck/models/users_models.dart';
 import 'package:mini_projeck/pages/login_page/login_page.dart';
-import 'package:mini_projeck/provider/provider.dart';
+import 'package:mini_projeck/provider/materi_provider.dart';
+import 'package:mini_projeck/provider/user_provider.dart';
 import 'package:mini_projeck/services/auth_services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,11 +18,8 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authProvider = Provider.of<AuthSerices>(context);
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    final User _user = _auth.currentUser!;
-    final localId = _user.uid;
-
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    UserModels userModel = userProvider.allUsers;
     return Drawer(
       child: Container(
         child: Column(
@@ -70,7 +68,7 @@ class CustomDrawer extends StatelessWidget {
                           width: getPropertionateScreenWidht(40),
                         ),
                         Text(
-                          _authProvider.allUsers.nama,
+                          userModel.nama,
                           style: primaryTextStyle.copyWith(
                               fontSize: 16, fontWeight: medium),
                         ),
@@ -86,7 +84,7 @@ class CustomDrawer extends StatelessWidget {
                           width: getPropertionateScreenWidht(40),
                         ),
                         Text(
-                          _authProvider.allUsers.nins,
+                          userModel.nins,
                           style: primaryTextStyle.copyWith(
                               fontSize: 16, fontWeight: medium),
                         ),

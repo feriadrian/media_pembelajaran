@@ -5,7 +5,7 @@ import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
 import 'package:mini_projeck/pages/login_page/components/input_field.dart';
 import 'package:mini_projeck/pages/login_page/components/login_button.dart';
-import 'package:mini_projeck/provider/provider.dart';
+import 'package:mini_projeck/provider/materi_provider.dart';
 import 'package:provider/provider.dart';
 
 class DataDiri extends StatefulWidget {

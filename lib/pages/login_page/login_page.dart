@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mini_projeck/config/config.dart';
 import 'package:mini_projeck/constant/constant.dart';
+import 'package:mini_projeck/models/users_models.dart';
 import 'package:mini_projeck/pages/home_page/home_page.dart';
 import 'package:mini_projeck/pages/login_page/components/input_field.dart';
 import 'package:mini_projeck/pages/login_page/components/login_button.dart';
 import 'package:mini_projeck/pages/login_page/components/masuk_sebagai_admin.dart';
+import 'package:mini_projeck/provider/user_provider.dart';
 import 'package:mini_projeck/services/auth_services.dart';
 import 'package:provider/provider.dart';
 
@@ -31,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authServices = Provider.of<AuthSerices>(context);
-
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    UserModels userModel = userProvider.allUsers;
     SizeConfig().init(context);
     return Scaffold(
       body: Form(
@@ -108,8 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                       LoginButton(
                         text: 'Login',
                         press: () async {
-                          if (await authServices.login(
-                              email: _emailC.text, password: _passC.text)) {
+                          if (await userProvider.login(
+                              _emailC.text, _passC.text)) {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
@@ -120,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                               SnackBar(
                                 backgroundColor: Colors.red,
                                 content: Text(
-                                  authServices.error.toString(),
+                                  AuthServices().error.toString(),
                                 ),
                               ),
                             );

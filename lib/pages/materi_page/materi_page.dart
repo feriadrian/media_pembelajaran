@@ -5,7 +5,8 @@ import 'package:mini_projeck/models/materi_model.dart';
 import 'package:mini_projeck/pages/materi_page/components/list_materi.dart';
 import 'package:mini_projeck/pages/materi_page/components/materi_card.dart';
 import 'package:mini_projeck/pages/video_page/video_page.dart';
-import 'package:mini_projeck/provider/provider.dart';
+import 'package:mini_projeck/provider/materi_provider.dart';
+import 'package:mini_projeck/services/materi_services.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -20,7 +21,7 @@ class MateriPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: StreamBuilder<List<MateriModel>>(
-          stream: _MateriProvider.inisialData(kategori),
+          stream: MateriServices().inisialData(kategori),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return SingleChildScrollView(

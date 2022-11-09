@@ -2,21 +2,13 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:mini_projeck/models/users_models.dart';
-import 'package:mini_projeck/provider/provider.dart';
-import 'package:provider/provider.dart';
+import 'package:mini_projeck/provider/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthSerices extends ChangeNotifier {
-  String urlMaster = 'https://mini-project-26683-default-rtdb.firebaseio.com/';
-
-  UserModels? _allUsers;
-
-  UserModels get allUsers => _allUsers!;
-
-  static FirebaseAuth _auth = FirebaseAuth.instance;
+class AuthServices {
+  String baseUrl = 'https://mini-project-26683-default-rtdb.firebaseio.com/';
 
   Future setToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -24,76 +16,50 @@ class AuthSerices extends ChangeNotifier {
     prefs.setString('token', token);
   }
 
+  FirebaseAuth _auth = FirebaseAuth.instance;
   String _error = '';
   String get error => _error;
 
-  Stream<User?> get streamAuthStatus => _auth.authStateChanges();
-
-  Future<bool> login({required String email, required String password}) async {
+  Future<UserModels> addUsers(String nama, nisn, String role) async {
+    Uri url = Uri.parse('$baseUrl/users.json');
+    final User user = _auth.currentUser!;
+    final id = user.uid;
     try {
-      // UserCredential userCredential =
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      final User _user = _auth.currentUser!;
-      final localId = _user.uid;
+      var response = await http.post(
+        url,
+        body: json.encode({
+          'id': id,
+          'nama': nama,
+          'nisn': nisn,
+          'role': role,
+        }),
+      );
 
-      setToken(localId);
-
-      // print(setToken(await _user.getIdToken()));
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-
-      await singIn(email, password);
-
-      _error = '';
-
-      _allUsers = await fetchDataUser(localId);
-      notifyListeners();
-      return true;
-    } on FirebaseAuthException catch (e) {
-      _error = e.message.toString();
-      notifyListeners();
-      return false;
+      if (response.statusCode > 300 || response.statusCode < 200) {
+        throw (response.statusCode);
+      } else {
+        UserModels data = UserModels(
+          id: id,
+          nama: nama,
+          nins: nisn,
+          role: role,
+        );
+        return UserModels(
+          id: id,
+          nama: nama,
+          nins: nisn,
+          role: role,
+        );
+      }
+    } catch (err) {
+      throw (err);
     }
-  }
-
-  Future<bool> regis({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      // UserCredential userCredential =
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      final User user = _auth.currentUser!;
-      final localId = user.uid;
-
-      final String role = 'siswa';
-      singUp(email, password);
-      _error = '';
-      final String nama = '-';
-      final String nisn = '-';
-
-      await MateriProvider().addUsers(localId, email, nama, nisn, role);
-      notifyListeners();
-      return true;
-    } on FirebaseAuthException catch (e) {
-      _error = e.message.toString();
-      notifyListeners();
-      return false;
-    }
-  }
-
-  void logout() async {
-    await FirebaseAuth.instance.signOut();
-    notifyListeners();
   }
 
   Future<UserModels> fetchDataUser(
     String id,
   ) async {
-    Uri uri = Uri.parse('$urlMaster/users.json');
-    // final User user = _auth.currentUser!;
-    // final uid = user.uid;
+    Uri uri = Uri.parse('$baseUrl/users.json');
     try {
       var response = await http.get(uri);
 
@@ -110,11 +76,9 @@ class AuthSerices extends ChangeNotifier {
               if (value['id'] == id) {
                 userModels = UserModels(
                   id: key,
-                  email: value['email'],
                   nama: value['nama'],
                   nins: value['nisn'],
                   role: value['role'],
-                  createAt: DateTime.now(),
                 );
                 print(userModels!.nama.toString());
               }
@@ -124,35 +88,46 @@ class AuthSerices extends ChangeNotifier {
           print('daa null');
         }
       }
-      _allUsers = userModels;
-      notifyListeners();
+
       return userModels!;
     } catch (err) {
-      throw (err);
+      return throw (err);
     }
   }
 
-  Future<void> singUp(String email, String password) async {
-    Uri url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBLoyyGLhfyw2K-kNdIcVluwjDy5mXvIVE');
-    var response = await http.post(url,
-        body: json.encode({
-          'email': email,
-          'password': password,
-          'returnSecureToken': true,
-        }));
-    print(json.decode(response.body));
+  Future<bool> login({required String email, required String password}) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      final User _user = _auth.currentUser!;
+      final token = await _user.getIdToken();
+      final localId = _user.uid;
+
+      setToken(localId);
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _error = e.message.toString();
+    }
+    return false;
   }
 
-  Future<void> singIn(String email, String password) async {
-    Uri url = Uri.parse(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBLoyyGLhfyw2K-kNdIcVluwjDy5mXvIVE');
-    var response = await http.post(url,
-        body: json.encode({
-          'email': email,
-          'password': password,
-          'returnSecureToken': true,
-        }));
-    print(json.decode(response.body));
+  Future<bool> regis({
+    required String email,
+    required String password,
+    required String nama,
+    required String nisn,
+    required String role,
+  }) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      await UserProvider().addUsers(nama, nisn, role);
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      _error = e.message.toString();
+    }
+    return false;
   }
 }
