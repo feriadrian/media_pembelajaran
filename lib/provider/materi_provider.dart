@@ -59,8 +59,6 @@ class MateriProvider extends ChangeNotifier {
   }
 }
 
-  
-
 // Future<ModelMateri> fetchMateri(http.Client client) async {
 //   final response = await client.get(Uri.parse(
 //       'https://mini-project-26683-default-rtdb.firebaseio.com/materi/Himpunan/-NFsOoCZU_pO9X60zHG7'));
@@ -68,7 +66,7 @@ class MateriProvider extends ChangeNotifier {
 //   if (response.statusCode == 200) {
 //     return ModelMateri.fromJson(jsonDecode(response.body));
 //   } else {
-//     throw Exception('Failed to load album');
+//     throw Exception('Failed to Materi');
 //   }
 // }
 
